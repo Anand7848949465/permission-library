@@ -29,7 +29,7 @@ import com.iserveu.permission.R
 import com.iserveu.permission.multiplepermission.MultiPlePermission
 import com.iserveu.permission.multiplepermission.MultiplePermissionCallback
 import com.iserveu.permission.multiplepermission.MyActivityResultCallback
-import com.iserveu.permission.multiplepermission.OnCompletePermissionGranted
+import com.iserveu.permission.multiplepermission.OnUserAction
 import com.iserveu.permission.utils.Util.checkLocationPermission
 import com.iserveu.permission.utils.Util.showLog
 import kotlinx.coroutines.CoroutineScope
@@ -115,9 +115,13 @@ class LocationAgent(
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
-                .onCompletePermissionGranted(object : OnCompletePermissionGranted {
-                    override fun onComplete() {
+                .onCompletePermissionGranted(object : OnUserAction {
+                    override fun onAllPermissionGranted() {
                         getLocation()
+                    }
+
+                    override fun onDeniedToGrantPermission() {
+                        mLocationUpdateListener.onDeniedToGrantPermission()
                     }
                 })
                 .multiplePermissionLauncher(mMultiplePermissionLauncher)
@@ -133,7 +137,8 @@ class LocationAgent(
      * If the user cancels the dialog, finishes the activity.
      */
     private fun showSettingsDialog() {
-        showAlert(mContext as Activity, mContext.getString(R.string.location_permission_required),
+        showAlert(mContext as Activity,
+            mContext.getString(R.string.location_permission_required),
             mContext.getString(R.string.please_grant_location_permission),
             mContext.getString(R.string.settings),
             mContext.getString(R.string.cancel),
@@ -144,7 +149,8 @@ class LocationAgent(
                 val uri = Uri.fromParts("package", mContext.getPackageName(), null)
                 intent.setData(uri)
                 mIntentLauncher.launch(intent)
-            }, { _: DialogInterface?, _: Int -> mContext.finish() })
+            },
+            { _: DialogInterface?, _: Int -> mLocationUpdateListener.onDeniedToTurnOnLocation() })
     }
 
     /**

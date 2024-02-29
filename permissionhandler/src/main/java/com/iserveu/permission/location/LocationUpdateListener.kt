@@ -8,4 +8,6 @@ interface LocationUpdateListener {
      */
     fun onLocationUpdate(latLong: String?)
     fun proceedWithUi()
+    fun onDeniedToGrantPermission()
+    fun onDeniedToTurnOnLocation()
 }

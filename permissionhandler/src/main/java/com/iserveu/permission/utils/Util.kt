@@ -23,4 +23,9 @@ object Util {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
+    fun checkAllPermissionGranted(context: Context, permissionList: Array<String>): Boolean {
+        return !permissionList.any {
+            ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+        }
+    }
 }

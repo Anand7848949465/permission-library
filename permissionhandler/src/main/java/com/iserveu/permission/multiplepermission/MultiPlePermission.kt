@@ -25,9 +25,8 @@ object MultiPlePermission {
         }
 
         private var mPermissionList = arrayOf<String>()
-        private var mPermissionDeniedCount = 0
         private var needToAskPermission = false
-        private lateinit var mOnCompletePermissionGranted: OnCompletePermissionGranted
+        private lateinit var mOnUserAction: OnUserAction
         private lateinit var mCallback: MyActivityResultCallback
         private lateinit var mContext: Context
         private lateinit var mMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>
@@ -41,9 +40,9 @@ object MultiPlePermission {
             this.mContext = context
         }
 
-        fun onCompletePermissionGranted(onCompletePermissionGranted: OnCompletePermissionGranted) =
+        fun onCompletePermissionGranted(onUserAction: OnUserAction) =
             apply {
-                this.mOnCompletePermissionGranted = onCompletePermissionGranted
+                this.mOnUserAction = onUserAction
             }
 
         fun callBack(callback: MyActivityResultCallback) = apply {
@@ -64,7 +63,7 @@ object MultiPlePermission {
         fun build() = apply {
             require(::mContext.isInitialized) { "Context is mandatory" }
             require(::mIntentLauncher.isInitialized) { "Permission Launcher is mandatory" }
-            require(::mOnCompletePermissionGranted.isInitialized) { "OnCompletePermissionGranted is mandatory" }
+            require(::mOnUserAction.isInitialized) { "OnCompletePermissionGranted is mandatory" }
             require(::mCallback.isInitialized) { "Callback is mandatory" }
             require(::mMultiplePermissionLauncher.isInitialized) { "ActivityResultLauncher is mandatory" }
             checkPermissions()
@@ -81,10 +80,9 @@ object MultiPlePermission {
                 }
             }
             if (needToAskPermission) {
-                mPermissionDeniedCount += 1
                 mMultiplePermissionLauncher.launch(mPermissionList)
             } else {
-                mOnCompletePermissionGranted.onComplete()
+                mOnUserAction.onAllPermissionGranted()
             }
         }
 
@@ -107,7 +105,7 @@ object MultiPlePermission {
                     intent.setData(uri)
                     mPermissionLauncher.launch(intent)
                 },
-                { _: DialogInterface?, _: Int -> (mContext as Activity).finish() })
+                { _: DialogInterface?, _: Int -> mOnUserAction.onDeniedToGrantPermission()})
         }
 
         /**
@@ -149,6 +147,7 @@ object MultiPlePermission {
                 val dialog: AlertDialog = builder.create()
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCancelable(false)
+                dialog.setCanceledOnTouchOutside(false)
                 dialog.show()
             } catch (e: ActivityNotFoundException) {
                 Util.showLog(TAG, e.localizedMessage)
@@ -178,10 +177,9 @@ object MultiPlePermission {
             if (isAnyPermissionPermanentlyDenied) {
                 showSettingsDialog(mIntentLauncher)
             } else if (permissions.size != grantedPermissions.size) {
-                mPermissionDeniedCount += 1
                 mMultiplePermissionLauncher.launch(mPermissionList)
             } else {
-                mOnCompletePermissionGranted.onComplete()
+                mOnUserAction.onAllPermissionGranted()
             }
         }
 
@@ -191,6 +189,7 @@ object MultiPlePermission {
     }
 }
 
-interface OnCompletePermissionGranted {
-    fun onComplete()
+interface OnUserAction {
+    fun onAllPermissionGranted()
+    fun onDeniedToGrantPermission()
 }
