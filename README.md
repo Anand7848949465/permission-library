@@ -2,11 +2,10 @@ Use Dependency
 
 **implementation 'com.gitlab.isu_tech:utility:0.002'**__
 
-
-```kotlin
 /**
  * Launcher for requesting runtime permissions.
  */
+ 
 ```
 private val callBack = MyActivityResultCallback()
 
