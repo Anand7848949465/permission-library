@@ -58,6 +58,7 @@ MultiPlePermission
  */
 
     ```
+    
 BluetoothAgent(
     mContext = context,
     permissionList= arrayOf(
@@ -86,6 +87,7 @@ BluetoothAgent(
     }
 )
     .checkBluetooth()
+
 ```
 
 
