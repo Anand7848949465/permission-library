@@ -1,6 +1,6 @@
 Use Dependency
 
-**implementation 'com.gitlab.isu_tech:utility:0.002'**__
+**implementation 'com.gitlab.isu_tech:utility:0.004'**__
 
 
 
