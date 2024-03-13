@@ -94,7 +94,8 @@ BluetoothAgent(
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    ```
+
+```
 LaunchedEffect(key1 = Unit ){
         LocationAgent(
         context ,
@@ -116,6 +117,7 @@ LaunchedEffect(key1 = Unit ){
     ).getLocation()
 }
 ```
+
 
 
 
