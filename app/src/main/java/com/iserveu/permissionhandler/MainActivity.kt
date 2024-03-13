@@ -3,6 +3,7 @@ package com.iserveu.permissionhandler
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,12 +15,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import com.iserveu.permission.bluetooth.BluetoothAgent
 import com.iserveu.permission.bluetooth.ProceedOperationListener
+import com.iserveu.permission.location.LocationAgent
+import com.iserveu.permission.location.LocationUpdateListener
 import com.iserveu.permission.multiplepermission.MultiPlePermission
 import com.iserveu.permission.multiplepermission.MyActivityResultCallback
 import com.iserveu.permission.multiplepermission.OnUserAction
@@ -59,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         "android.permission.READ_MEDIA_IMAGES",
                         "android.permission.READ_MEDIA_VIDEO"
                     )
-                    MultiPlePermission
+                    /*MultiPlePermission
                         .Builder()
                         .context(context)
                         .permissionList(
@@ -79,7 +85,45 @@ class MainActivity : ComponentActivity() {
                         .multiplePermissionLauncher(mMultiplePermissionRequestLauncher)
                         .intentResultLauncher(intentActivityResultLauncher)
                         .callBack(callBack)
-                        .build()
+                        .build()*/
+                    val showAlert= rememberSaveable {
+                        mutableStateOf(false)
+                    }
+                    if(showAlert.value){
+                        Toast.makeText(context, "Denied", Toast.LENGTH_SHORT).show()
+                    }
+
+                    Log.d("showalertvalue",showAlert.value.toString())
+
+
+                    LaunchedEffect(key1 = Unit) {
+                        LocationAgent(
+                            context,
+                            mMultiplePermissionRequestLauncher,
+                            intentActivityResultLauncher,
+                            callBack,
+                            object :
+                                LocationUpdateListener {
+                                override fun onDeniedToGrantPermission() {
+                                    showAlert.value = true
+                                }
+
+                                override fun onDeniedToTurnOnLocation() {
+                                    showAlert.value = true
+                                }
+
+                                override fun onLocationUpdate(latLong: String?) {
+                                    latLong?.let {
+                                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun proceedWithUi() {
+                                }
+                            },
+                        ).getLocation()
+                    }
+
 
                     Box(
                         modifier = Modifier.fillMaxSize(),

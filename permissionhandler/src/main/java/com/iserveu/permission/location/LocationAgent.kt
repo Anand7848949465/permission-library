@@ -14,7 +14,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.provider.Settings
 import android.view.Window
 import android.view.WindowManager.BadTokenException
@@ -48,9 +47,7 @@ class LocationAgent(
     private val timeOutMilliSeconds = 3000 // Timeout duration in milliseconds
     private var mIsLocationReceived = false // Flag to track if location is received
     private var mIsLocationDialogShowing = false
-    private var mEditor: SharedPreferences.Editor? = null
     private var mLatLongSharedPreferences: SharedPreferences? = null
-    private var mPermissionDeniedCount = 0
 
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -75,16 +72,11 @@ class LocationAgent(
 
     init {
         callback.setCallback(this)
-        val mSharedPreference: SharedPreferences =
-            mContext.getSharedPreferences(mContext.getString(R.string.unified_aeps), MODE_PRIVATE)
         mLatLongSharedPreferences =
             mContext.getSharedPreferences(
                 mContext.getString(R.string.location_preference),
                 MODE_PRIVATE
             )
-        mEditor = mSharedPreference.edit()
-        mPermissionDeniedCount =
-            mSharedPreference.getInt(mContext.getString(R.string.denied_count), 0)
         mLocationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
     }
 
@@ -131,27 +123,6 @@ class LocationAgent(
         }
     }
 
-    /**
-     * Displays a dialog prompting the user to grant location permission. If the user chooses to grant permission,
-     * opens the application settings where the user can manually grant the required permission.
-     * If the user cancels the dialog, finishes the activity.
-     */
-    private fun showSettingsDialog() {
-        showAlert(mContext as Activity,
-            mContext.getString(R.string.location_permission_required),
-            mContext.getString(R.string.please_grant_location_permission),
-            mContext.getString(R.string.settings),
-            mContext.getString(R.string.cancel),
-            { _: DialogInterface?, _: Int ->
-                // Open app settings
-                val intent =
-                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", mContext.getPackageName(), null)
-                intent.setData(uri)
-                mIntentLauncher.launch(intent)
-            },
-            { _: DialogInterface?, _: Int -> mLocationUpdateListener.onDeniedToGrantPermission() })
-    }
 
     /**
      * Handles GPS functionality. Checks if GPS is enabled on the device.
