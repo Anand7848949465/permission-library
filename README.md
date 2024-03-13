@@ -2,10 +2,14 @@ Use Dependency
 
 **implementation 'com.gitlab.isu_tech:utility:0.002'**__
 
+
+
 /**
  * Launcher for requesting runtime permissions.
  */
  
+ 
+
 ```
 private val callBack = MyActivityResultCallback()
 
@@ -21,12 +25,17 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
 ```
 
 
+
+
 /**
  * Multiple permission request.
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    ```
+
+
+
+```
 MultiPlePermission
     .Builder()
     .context(context)
@@ -51,10 +60,15 @@ MultiPlePermission
 ```
 
 
+
+
+
 /**
  * Bluetooth permission request with turn on bluetooth.
  * You can ask the permission inside the onCreate function or on a button click
  */
+
+
 
 ```
 BluetoothAgent(
