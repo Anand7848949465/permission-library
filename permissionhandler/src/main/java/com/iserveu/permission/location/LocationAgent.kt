@@ -103,9 +103,9 @@ class LocationAgent(
                 }
             }
             handleGps()
-        } else if (mPermissionDeniedCount == 2) {
+        } /*else if (mPermissionDeniedCount == 2) {
             showSettingsDialog()
-        } else {
+        }*/ else {
             MultiPlePermission
                 .Builder()
                 .context(mContext)
@@ -150,7 +150,7 @@ class LocationAgent(
                 intent.setData(uri)
                 mIntentLauncher.launch(intent)
             },
-            { _: DialogInterface?, _: Int -> mLocationUpdateListener.onDeniedToTurnOnLocation() })
+            { _: DialogInterface?, _: Int -> mLocationUpdateListener.onDeniedToGrantPermission() })
     }
 
     /**
@@ -177,7 +177,7 @@ class LocationAgent(
                     mIsLocationDialogShowing = false
                 }, { _: DialogInterface?, _: Int ->
                     mIsLocationDialogShowing = false
-                    mContext.finish()
+                    mLocationUpdateListener.onDeniedToTurnOnLocation()
                 }
             )
         }
