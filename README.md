@@ -1,7 +1,13 @@
+Use Dependency
+
+**implementation 'com.gitlab.isu_tech:utility:0.002'**__
+
+
 ```kotlin
 /**
  * Launcher for requesting runtime permissions.
  */
+```
 private val callBack = MyActivityResultCallback()
 
 private val mMultiplePermissionRequestLauncher: ActivityResultLauncher<Array<String>> =
@@ -13,13 +19,16 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         callBack.onActivityResult(result)
     }
+```
+
 
 /**
  * Multiple permission request.
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    MultiPlePermission
+    ```
+MultiPlePermission
     .Builder()
     .context(context)
     .permissionList(
@@ -40,6 +49,7 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
     .intentResultLauncher(intentActivityResultLauncher)
     .callBack(callBack)
     .build()
+```
 
 
 /**
@@ -47,7 +57,8 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    BluetoothAgent(
+    ```
+BluetoothAgent(
     mContext = context,
     permissionList= arrayOf(
         Manifest.permission.BLUETOOTH_CONNECT,  
@@ -75,6 +86,7 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
     }
 )
     .checkBluetooth()
+```
 
 
 /**
@@ -82,7 +94,8 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    LaunchedEffect(key1 = Unit ){
+    ```
+LaunchedEffect(key1 = Unit ){
         LocationAgent(
         context ,
         mMultiplePermissionRequestLauncher,
@@ -102,6 +115,7 @@ private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
         },
     ).getLocation()
 }
+```
 
 
 
