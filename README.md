@@ -57,8 +57,7 @@ MultiPlePermission
  * You can ask the permission inside the onCreate function or on a button click
  */
 
-    ```
-    
+```
 BluetoothAgent(
     mContext = context,
     permissionList= arrayOf(
@@ -84,11 +83,10 @@ BluetoothAgent(
             // Not Required
         }
 
-    }
-)
+    })   
     .checkBluetooth()
-
 ```
+
 
 
 /**
