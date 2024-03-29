@@ -195,6 +195,10 @@ class LocationAgent(
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCancelable(false)
                 dialog.show()
+
+                if (showAlertContext.isDestroyed) {
+                    dialog.dismiss();
+                }
             }
         } catch (e: ActivityNotFoundException) {
             showLog(TAG, e.localizedMessage)

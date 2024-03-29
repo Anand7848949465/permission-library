@@ -26,10 +26,9 @@ import com.iserveu.permission.bluetooth.BluetoothAgent
 import com.iserveu.permission.bluetooth.ProceedOperationListener
 import com.iserveu.permission.location.LocationAgent
 import com.iserveu.permission.location.LocationUpdateListener
-import com.iserveu.permission.multiplepermission.MultiPlePermission
 import com.iserveu.permission.multiplepermission.MyActivityResultCallback
-import com.iserveu.permission.multiplepermission.OnUserAction
 import com.iserveu.permissionhandler.ui.theme.PermissionHandlerTheme
+import kotlinx.coroutines.delay
 
 
 class MainActivity : ComponentActivity() {
@@ -86,15 +85,18 @@ class MainActivity : ComponentActivity() {
                         .intentResultLauncher(intentActivityResultLauncher)
                         .callBack(callBack)
                         .build()*/
-                    val showAlert= rememberSaveable {
+                    val showAlert = rememberSaveable {
                         mutableStateOf(false)
                     }
-                    if(showAlert.value){
+                    if (showAlert.value) {
                         Toast.makeText(context, "Denied", Toast.LENGTH_SHORT).show()
                     }
 
-                    Log.d("showalertvalue",showAlert.value.toString())
-
+                    Log.d("showalertvalue", showAlert.value.toString())
+                    LaunchedEffect(true) {
+                        delay(5000)
+                       finish()
+                    }
 
                     LaunchedEffect(key1 = Unit) {
                         LocationAgent(
@@ -135,19 +137,27 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.clickable {
                                 BluetoothAgent(
                                     mContext = context,
-                                    permissionList= arrayOf(Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN),
+                                    permissionList = arrayOf(
+                                        Manifest.permission.BLUETOOTH_CONNECT,
+                                        Manifest.permission.BLUETOOTH_SCAN
+                                    ),
                                     mMultiplePermissionRequestLauncher,
                                     intentActivityResultLauncher,
                                     callBack,
-                                    object :ProceedOperationListener{
+                                    object : ProceedOperationListener {
                                         override fun proceedWithUi() {
                                             Toast
-                                                .makeText(context, "All Permission Granted", Toast.LENGTH_SHORT)
+                                                .makeText(
+                                                    context,
+                                                    "All Permission Granted",
+                                                    Toast.LENGTH_SHORT
+                                                )
                                                 .show()
                                         }
 
                                         override fun onDeniedToGrantPermission() {
-                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT)
+                                                .show()
                                         }
 
                                         override fun onBluetoothNotSupported() {

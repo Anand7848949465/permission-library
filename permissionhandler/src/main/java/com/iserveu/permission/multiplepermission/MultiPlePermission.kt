@@ -32,6 +32,7 @@ object MultiPlePermission {
         private lateinit var mMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>
         private lateinit var mIntentLauncher: ActivityResultLauncher<Intent>
 
+
         fun permissionList(permissions: Array<String>) = apply {
             this.mPermissionList = permissions
         }
