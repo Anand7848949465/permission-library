@@ -20,7 +20,6 @@ class BluetoothAgent(
     private val permissionList: Array<String>,
     private val mMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>,
     private val mIntentLauncher: ActivityResultLauncher<Intent>,
-    private val callback: MyActivityResultCallback,
     private val proceedOperationListener: ProceedOperationListener,
 ) : MultiplePermissionCallback {
 
@@ -72,10 +71,9 @@ class BluetoothAgent(
                     })
                     .multiplePermissionLauncher(mMultiplePermissionLauncher)
                     .intentResultLauncher(mIntentLauncher)
-                    .callBack(callback)
                     .build()
             } else {
-                callback.setCallback(this)
+                MyActivityResultCallback.setCallback(this)
                 val turnOn = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 this.mIntentLauncher.launch(turnOn)
             }

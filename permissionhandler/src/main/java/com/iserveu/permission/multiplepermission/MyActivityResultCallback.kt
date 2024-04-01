@@ -3,16 +3,17 @@ package com.iserveu.permission.multiplepermission
 import androidx.activity.result.ActivityResult
 import com.iserveu.permission.utils.Util
 
-class MyActivityResultCallback {
-     private var multiplePermissionCallback: MultiplePermissionCallback? = null
+object MyActivityResultCallback {
+    private var multiplePermissionCallback: MultiplePermissionCallback? = null
+
 
     fun setCallback(multiplePermissionCallBack: MultiplePermissionCallback) {
-        this.multiplePermissionCallback = multiplePermissionCallBack
+        multiplePermissionCallback = multiplePermissionCallBack
     }
 
     fun onActivityResult(permissions: Any) {
         if (permissions is Map<*, *>) {
-            multiplePermissionCallback?.handleMultiplePermissionCallBack(permissions as Map<String, Boolean>)
+           multiplePermissionCallback?.handleMultiplePermissionCallBack(permissions as Map<String, Boolean>)
         } else if (permissions is ActivityResult) {
             try {
                 multiplePermissionCallback?.handleActivityResultCallBack(permissions)

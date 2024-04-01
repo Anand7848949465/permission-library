@@ -40,7 +40,6 @@ class LocationAgent(
     private val mContext: Context,
     private val mMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>,
     private val mIntentLauncher: ActivityResultLauncher<Intent>,
-    private val callback: MyActivityResultCallback,
     private val mLocationUpdateListener: LocationUpdateListener,
 ) : MultiplePermissionCallback {
     private var mLocationManager: LocationManager? = null
@@ -71,7 +70,7 @@ class LocationAgent(
     }
 
     init {
-        callback.setCallback(this)
+        MyActivityResultCallback.setCallback(this)
         mLatLongSharedPreferences =
             mContext.getSharedPreferences(
                 mContext.getString(R.string.location_preference),
@@ -118,7 +117,6 @@ class LocationAgent(
                 })
                 .multiplePermissionLauncher(mMultiplePermissionLauncher)
                 .intentResultLauncher(mIntentLauncher)
-                .callBack(callback)
                 .build()
         }
     }
@@ -197,7 +195,7 @@ class LocationAgent(
                 dialog.show()
 
                 if (showAlertContext.isDestroyed) {
-                    dialog.dismiss();
+                    dialog.dismiss()
                 }
             }
         } catch (e: ActivityNotFoundException) {

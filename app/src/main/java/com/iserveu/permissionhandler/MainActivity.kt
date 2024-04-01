@@ -32,18 +32,17 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : ComponentActivity() {
-    private val callBack = MyActivityResultCallback()
 
     /**
      * Launcher for requesting runtime permissions.
      */
     private val mMultiplePermissionRequestLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            callBack.onActivityResult(permissions)
+            MyActivityResultCallback.onActivityResult(permissions)
         }
     private val intentActivityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            callBack.onActivityResult(result)
+            MyActivityResultCallback.onActivityResult(result)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,18 +91,11 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(context, "Denied", Toast.LENGTH_SHORT).show()
                     }
 
-                    Log.d("showalertvalue", showAlert.value.toString())
-                    LaunchedEffect(true) {
-                        delay(5000)
-                       finish()
-                    }
-
                     LaunchedEffect(key1 = Unit) {
                         LocationAgent(
                             context,
                             mMultiplePermissionRequestLauncher,
                             intentActivityResultLauncher,
-                            callBack,
                             object :
                                 LocationUpdateListener {
                                 override fun onDeniedToGrantPermission() {
@@ -143,7 +135,6 @@ class MainActivity : ComponentActivity() {
                                     ),
                                     mMultiplePermissionRequestLauncher,
                                     intentActivityResultLauncher,
-                                    callBack,
                                     object : ProceedOperationListener {
                                         override fun proceedWithUi() {
                                             Toast

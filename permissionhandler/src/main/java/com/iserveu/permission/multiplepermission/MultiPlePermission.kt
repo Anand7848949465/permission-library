@@ -20,6 +20,10 @@ import com.iserveu.permission.utils.Util
 
 object MultiPlePermission {
     class Builder : MultiplePermissionCallback {
+        init {
+            MyActivityResultCallback.setCallback(this)
+        }
+
         companion object {
             private val TAG: String? = Builder::class.simpleName
         }
@@ -27,7 +31,6 @@ object MultiPlePermission {
         private var mPermissionList = arrayOf<String>()
         private var needToAskPermission = false
         private lateinit var mOnUserAction: OnUserAction
-        private lateinit var mCallback: MyActivityResultCallback
         private lateinit var mContext: Context
         private lateinit var mMultiplePermissionLauncher: ActivityResultLauncher<Array<String>>
         private lateinit var mIntentLauncher: ActivityResultLauncher<Intent>
@@ -46,11 +49,6 @@ object MultiPlePermission {
                 this.mOnUserAction = onUserAction
             }
 
-        fun callBack(callback: MyActivityResultCallback) = apply {
-            this.mCallback = callback
-            this.mCallback.setCallback(this@Builder)
-        }
-
         fun multiplePermissionLauncher(multiplePermissionLauncher: ActivityResultLauncher<Array<String>>) =
             apply {
                 this.mMultiplePermissionLauncher = multiplePermissionLauncher
@@ -65,7 +63,6 @@ object MultiPlePermission {
             require(::mContext.isInitialized) { "Context is mandatory" }
             require(::mIntentLauncher.isInitialized) { "Permission Launcher is mandatory" }
             require(::mOnUserAction.isInitialized) { "OnCompletePermissionGranted is mandatory" }
-            require(::mCallback.isInitialized) { "Callback is mandatory" }
             require(::mMultiplePermissionLauncher.isInitialized) { "ActivityResultLauncher is mandatory" }
             checkPermissions()
         }
@@ -106,7 +103,7 @@ object MultiPlePermission {
                     intent.setData(uri)
                     mPermissionLauncher.launch(intent)
                 },
-                { _: DialogInterface?, _: Int -> mOnUserAction.onDeniedToGrantPermission()})
+                { _: DialogInterface?, _: Int -> mOnUserAction.onDeniedToGrantPermission() })
         }
 
         /**
