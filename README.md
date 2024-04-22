@@ -1,6 +1,6 @@
 Use Dependency
 
-**implementation 'com.gitlab.isu_tech:utility:0.004'**__
+**implementation 'com.github.codeworld7848:permission-library_new:0.001'**
 
 
 
