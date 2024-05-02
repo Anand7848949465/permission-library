@@ -64,6 +64,6 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    implementation 'com.github.codeworld7848:permission-library_new:0.002'
+    implementation 'com.github.codeworld7848:permission-library_new:0.003'
 
 }

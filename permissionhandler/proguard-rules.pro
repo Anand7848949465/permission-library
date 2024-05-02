@@ -20,4 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepnames class com.iserveu.permission.multiplepermission.MultiPlePermission
+-keepnames class com.iserveu.permission.multiplepermission.MultiPlePermission.**{*;}
+-keepnames class com.iserveu.permission.location.LocationAgent.**{*;}
