@@ -13,7 +13,7 @@ repositories {
 
 // Add this dependency in your app build.gradle file
 
-**implementation 'com.github.codeworld7848:permission-library_new:0.001'**
+**implementation 'com.github.codeworld7848:permission-library_new:0.005'**
 
 
 
