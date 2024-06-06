@@ -1,4 +1,4 @@
-package com.isu.bbps
+package com.iserveu.permission.utils
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
